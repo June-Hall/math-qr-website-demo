@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学题目展示</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .problem-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .problem-number {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .problem-content {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: #3367d6;
+        }
+        .solution {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+        .solution-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .solution-steps {
+            line-height: 1.6;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .nav-btn {
+            background-color: #f1f3f4;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .nav-btn:hover {
+            background-color: #e8eaed;
+        }
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>数学题目展示</h1>
+            <p>扫描二维码，学习数学解题</p>
+        </div>
+
+        <div id="problem-container"></div>
+
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn">上一题</button>
+            <button class="nav-btn" id="next-btn">下一题</button>
+        </div>
+    </div>
+
+    <script>
+        // 数学题目和解答数据
+        const mathProblems = [
+            {
+                id: 1,
+                problem: "求解方程：3x + 5 = 20",
+                solution: {
+                    steps: [
+                        "将方程 3x + 5 = 20 移项，得到：3x = 20 - 5",
+                        "计算右侧： 3x = 15",
+                        "两边同除以3： x = 15 ÷ 3",
+                        "得到结果： x = 5"
+                    ],
+                    finalAnswer: "x = 5"
+                }
+            },
+            {
+                id: 2,
+                problem: "计算：∫(2x + 3)dx",
+                solution: {
+                    steps: [
+                        "使用积分法则：∫(2x + 3)dx = ∫2x dx + ∫3 dx",
+                        "对第一项积分：∫2x dx = 2∫x dx = 2(x²/2) = x²",
+                        "对第二项积分：∫3 dx = 3x",
+                        "合并结果：∫(2x + 3)dx = x² + 3x + C"
+                    ],
+                    finalAnswer: "x² + 3x + C，其中C为任意常数"
+                }
+            },
+            {
+                id: 3,
+                problem: "在△ABC中，已知边长a=3，b=4，c=5，求角A的大小。",
+                solution: {
+                    steps: [
+                        "使用余弦定理：cosA = (b² + c² - a²) / (2bc)",
+                        "代入数值：cosA = (4² + 5² - 3²) / (2×4×5)",
+                        "计算：cosA = (16 + 25 - 9) / 40",
+                        "化简：cosA = 32 / 40 = 0.8",
+                        "计算角度：A = arccos(0.8) ≈ 36.9°"
+                    ],
+                    finalAnswer: "A ≈ 36.9°"
+                }
+            },
+            {
+                id: 4,
+                problem: "求函数f(x) = x³ - 6x² + 9x - 4的导数。",
+                solution: {
+                    steps: [
+                        "使用导数规则：(x^n)' = n·x^(n-1)",
+                        "对每一项分别求导：",
+                        "(x³)' = 3x²",
+                        "(-6x²)' = -6·2x = -12x",
+                        "(9x)' = 9",
+                        "(-4)' = 0",
+                        "合并各项结果：f'(x) = 3x² - 12x + 9"
+                    ],
+                    finalAnswer: "f'(x) = 3x² - 12x + 9"
+                }
+            },
+            {
+                id: 5,
+                problem: "计算概率：一个袋子里有5个红球和3个蓝球。随机取出两个球，求取出的两球都是红球的概率。",
+                solution: {
+                    steps: [
+                        "总共有8个球，取出2个球的所有可能情况为：C(8,2) = 28",
+                        "从5个红球中取出2个球的方法数为：C(5,2) = 10",
+                        "所求概率为：P = C(5,2) / C(8,2) = 10 / 28 = 5/14"
+                    ],
+                    finalAnswer: "概率 = 5/14 ≈ 0.357"
+                }
+            }
+        ];
+
+        let currentProblemIndex = 0;
+
+        // 显示当前题目
+        function displayProblem() {
+            const problem = mathProblems[currentProblemIndex];
+            const problemContainer = document.getElementById('problem-container');
+
+            problemContainer.innerHTML = `
+                <div class="problem-card">
+                    <div class="problem-number">题目 ${problem.id}/5</div>
+                    <div class="problem-content">${problem.problem}</div>
+                    <button class="btn" onclick="toggleSolution(${problem.id})">查看解析</button>
+                    <div id="solution-${problem.id}" class="solution">
+                        <div class="solution-title">解析：</div>
+                        <div class="solution-steps">
+                            ${problem.solution.steps.map(step => `<p>${step}</p>`).join('')}
+                            <p><strong>答案：</strong> ${problem.solution.finalAnswer}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 更新导航按钮状态
+            document.getElementById('prev-btn').disabled = currentProblemIndex === 0;
+            document.getElementById('next-btn').disabled = currentProblemIndex === mathProblems.length - 1;
+        }
+
+        // 切换显示/隐藏解析
+        function toggleSolution(id) {
+            const solutionElement = document.getElementById(`solution-${id}`);
+            if (solutionElement.style.display === 'block') {
+                solutionElement.style.display = 'none';
+            } else {
+                solutionElement.style.display = 'block';
+            }
+        }
+
+        // 下一题
+        document.getElementById('next-btn').addEventListener('click', function() {
+            if (currentProblemIndex < mathProblems.length - 1) {
+                currentProblemIndex++;
+                displayProblem();
+            }
+        });
+
+        // 上一题
+        document.getElementById('prev-btn').addEventListener('click', function() {
+            if (currentProblemIndex > 0) {
+                currentProblemIndex--;
+                displayProblem();
+            }
+        });
+
+        // 初始化显示第一题
+        window.onload = function() {
+            displayProblem();
+        };
+    </script>
+</body>
+</html>
