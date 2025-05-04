@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>数学题目展示</title>
+    <!-- 添加MathJax支持 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -13,7 +15,7 @@
             color: #333;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -37,6 +39,16 @@
             font-size: 16px;
             line-height: 1.6;
             margin-bottom: 20px;
+        }
+        .problem-image, .solution-image {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .problem-image img, .solution-image img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+            border-radius: 5px;
         }
         .btn {
             background-color: #4285f4;
@@ -87,6 +99,46 @@
         .math {
             font-family: 'Times New Roman', Times, serif;
         }
+
+        /* 新增样式 */
+        .flex-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .problem-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        .image-container {
+            text-align: center;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .solution-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .solution-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .solution-text {
+            flex: 2;
+            min-width: 300px;
+        }
+        .solution-image-container {
+            text-align: center;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .katex-block {
+            margin: 10px 0;
+            overflow-x: auto;
+        }
     </style>
 </head>
 <body>
@@ -114,71 +166,88 @@
         const mathProblems = [
             {
                 id: 1,
-                problem: "求解方程：3x + 5 = 20",
+                problem: "如图，在△ABC中，∠ACB＝90°，AC＝8，AB＝10，DE垂直平分AC交AB于点E，则DE的长为<br><br>A．3<br>B．4<br>C．5<br>D．6",
+                image: "./static/image1.png", // 这里可以替换为实际图片链接
                 solution: {
                     steps: [
-                        "将方程 3x + 5 = 20 移项，得到：3x = 20 - 5",
-                        "计算右侧： 3x = 15",
-                        "两边同除以3： x = 15 ÷ 3",
-                        "得到结果： x = 5"
+                        "在直角三角形中，已知AC=8，AB=10，利用勾股定理求得BC=6。",
+                        "再由已知条件证得DE是△ABC的中位线，即可得到2DE=BC=6，DE=3."
                     ],
-                    finalAnswer: "x = 5"
-                }
+                    finalAnswer: "A．3"
+                },
+                layout: "default"
             },
             {
                 id: 2,
-                problem: "计算：∫(2x + 3)dx",
+                problem: "下列四组数，是勾股数的是<br><br>A．0.3，0.4，0.5<br>B．3，4，5<br>C．6，7，8<br>D．3²，4²，5²",
                 solution: {
                     steps: [
-                        "使用积分法则：∫(2x + 3)dx = ∫2x dx + ∫3 dx",
-                        "对第一项积分：∫2x dx = 2∫x dx = 2(x²/2) = x²",
-                        "对第二项积分：∫3 dx = 3x",
-                        "合并结果：∫(2x + 3)dx = x² + 3x + C"
+                        "A:0.3，0.4，0.5，虽然满足勾股定理，但不是整数，因此不是勾股数;",
+                        "B:3，4，5，满足勾股定理，且都是正整数，因此是勾股数;",
+                        "C:6，7，8，不满足勾股定理，因此不是勾股数;",
+                        "D:3²，4²，5²，不满足勾股定理，因此不是勾股数。"
                     ],
-                    finalAnswer: "x² + 3x + C，其中C为任意常数"
-                }
+                    finalAnswer: "B．3，4，5"
+                },
+                layout: "default"
             },
             {
                 id: 3,
-                problem: "在△ABC中，已知边长a=3，b=4，c=5，求角A的大小。",
+                problem: "2002年8月在北京召开的国际数学家大会会标如图所示，它是由四个相同的直角三角形与中间的小正方形拼成的一个大正方形．若大正方形的面积是13，小正方形的面积是1，直角三角形的较长直角边为a，较短直角边为b，则（a+b）²的值为<br><br>A．25<br>B．19<br>C．13<br>D．169",
+                image: "./static/image2.png", // 这里可以替换为实际图片链接
                 solution: {
                     steps: [
-                        "使用余弦定理：cosA = (b² + c² - a²) / (2bc)",
-                        "代入数值：cosA = (4² + 5² - 3²) / (2×4×5)",
-                        "计算：cosA = (16 + 25 - 9) / 40",
-                        "化简：cosA = 32 / 40 = 0.8",
-                        "计算角度：A = arccos(0.8) ≈ 36.9°"
+                        "题目中大正方形面积为13，小正方形面积为1",
+                        "设小正方形边长为1，则大正方形边长为√13",
+                        "大正方形面积 = 小正方形面积 + 4个直角三角形面积",
+                        "因此 13 = 1 + 4 × (ab/2)",
+                        "解得 ab = 3",
+                        "根据图形特点，a + b = √13 + 1 = 4 + 1 = 5",
+                        "所以 (a+b)² = 5² = 25"
                     ],
-                    finalAnswer: "A ≈ 36.9°"
-                }
+                    // solutionImage: "./static/image3.png", // 这里替换为题解图片
+                    finalAnswer: "A．25"
+                },
+                layout: "special"
             },
             {
                 id: 4,
-                problem: "求函数f(x) = x³ - 6x² + 9x - 4的导数。",
+                problem: "已知：如图,在△ABC 中 ，CD是边AB上的高，且CD²=AD·BD.求证：△ABC是直角三角形.",
+                image: "./static/image4.png", // 这里可以替换为实际图片链接
                 solution: {
                     steps: [
-                        "使用导数规则：(x^n)' = n·x^(n-1)",
-                        "对每一项分别求导：",
-                        "(x³)' = 3x²",
-                        "(-6x²)' = -6·2x = -12x",
-                        "(9x)' = 9",
-                        "(-4)' = 0",
-                        "合并各项结果：f'(x) = 3x² - 12x + 9"
+                        "根据题意，只要判断三边符合勾股定理的逆定理即可.",
+                        "证明：",
+                        "∵AC²=AD²+CD²,BC²=CD²+BD²,",
+                        "∴AC²+BC²=AD²+2CD²+BD²=AD²+2AD·BD+BD²=(AD+BD)²=AB².",
+                        "∴△ABC是直角三角形."
                     ],
-                    finalAnswer: "f'(x) = 3x² - 12x + 9"
-                }
+                    finalAnswer: "证明了△ABC是直角三角形"
+                },
+                layout: "flex"
             },
             {
                 id: 5,
-                problem: "计算概率：一个袋子里有5个红球和3个蓝球。随机取出两个球，求取出的两球都是红球的概率。",
+                problem: "已知：如图四边形ABCD,AD //BC,AB=4,BC=6,CD=5, AD=3.求：四边形ABCD的面积.",
+                image: "./static/image5.png", // 这里可以替换为实际图片链接
                 solution: {
                     steps: [
-                        "总共有8个球，取出2个球的所有可能情况为：C(8,2) = 28",
-                        "从5个红球中取出2个球的方法数为：C(5,2) = 10",
-                        "所求概率为：P = C(5,2) / C(8,2) = 10 / 28 = 5/14"
+                        "解作DE//AB,连结BD。",
+                        "则可以证明△ABD≌△EDB(ASA),",
+                        "∴DE=AB=4,BE=AD=3.",
+                        "∵BC=6,∴EC=EB=3.",
+                        "∵DE²+CE²=3²+4²=25=CD²,",
+                        "∴△DEC为直角三角形.",
+                        "又∵EC=EB=3,",
+                        "∴△DBC 为等腰三角形，DB=DC=5.",
+                        "在△BDA中AD²+AB²==3²+4²=25=BD²,",
+                        "∴△BDA 是直角三角形.它们的面积分别为S△BDA=1/2×3×4=6;",
+                        "S△DBC=1/2×6×4=12.",
+                        "∴S四边形ABCD=S△BDA+S△DBC=6+12=18."
                     ],
-                    finalAnswer: "概率 = 5/14 ≈ 0.357"
-                }
+                    finalAnswer: "四边形ABCD的面积为18平方单位"
+                },
+                layout: "flex"
             }
         ];
 
@@ -189,24 +258,83 @@
             const problem = mathProblems[currentProblemIndex];
             const problemContainer = document.getElementById('problem-container');
 
-            problemContainer.innerHTML = `
-                <div class="problem-card">
-                    <div class="problem-number">题目 ${problem.id}/5</div>
-                    <div class="problem-content">${problem.problem}</div>
-                    <button class="btn" onclick="toggleSolution(${problem.id})">查看解析</button>
-                    <div id="solution-${problem.id}" class="solution">
-                        <div class="solution-title">解析：</div>
-                        <div class="solution-steps">
-                            ${problem.solution.steps.map(step => `<p>${step}</p>`).join('')}
-                            <p><strong>答案：</strong> ${problem.solution.finalAnswer}</p>
+            let problemHTML = '';
+
+            // 根据不同布局类型展示不同格式
+            if (problem.layout === "special") {
+                // 特殊布局用于第三题
+                problemHTML = `
+                    <div class="problem-card">
+                        <div class="problem-number">题目 ${problem.id}/5</div>
+                        <div class="problem-text">
+                            ${problem.problem}
+                        </div>
+                        ${problem.image ? `<div class="image-container"><img src="${problem.image}" alt="题目图示" /></div>` : ''}
+                        <button class="btn" onclick="toggleSolution(${problem.id})">查看解析</button>
+                        <div id="solution-${problem.id}" class="solution">
+                            <div class="solution-title">解析：</div>
+                            <div class="solution-steps">
+                                ${problem.solution.steps ? problem.solution.steps.map(step => `<p>${step}</p>`).join('') : ''}
+                                <p><strong>答案：</strong> ${problem.solution.finalAnswer}</p>
+                            </div>
+                            ${problem.solution.solutionImage ? `
+                            <div class="solution-image-container">
+                                <img src="${problem.solution.solutionImage}" alt="解析图示" />
+                            </div>` : ''}
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            } else if (problem.layout === "flex") {
+                // 弹性布局用于其他题目
+                problemHTML = `
+                    <div class="problem-card">
+                        <div class="problem-number">题目 ${problem.id}/5</div>
+                        <div class="problem-text">
+                            ${problem.problem}
+                        </div>
+                        ${problem.image ? `<div class="image-container"><img src="${problem.image}" alt="题目图示" /></div>` : ''}
+                        <button class="btn" onclick="toggleSolution(${problem.id})">查看解析</button>
+                        <div id="solution-${problem.id}" class="solution">
+                            <div class="solution-title">解析：</div>
+                            <div class="solution-steps">
+                                ${problem.solution.steps ? problem.solution.steps.map(step => `<p>${step}</p>`).join('') : ''}
+                                <p><strong>答案：</strong> ${problem.solution.finalAnswer}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 默认布局
+                problemHTML = `
+                    <div class="problem-card">
+                        <div class="problem-number">题目 ${problem.id}/5</div>
+                        <div class="problem-content">
+                            ${problem.problem}
+                            ${problem.image ? `<div class="problem-image"><img src="${problem.image}" alt="题目图示" /></div>` : ''}
+                        </div>
+                        <button class="btn" onclick="toggleSolution(${problem.id})">查看解析</button>
+                        <div id="solution-${problem.id}" class="solution">
+                            <div class="solution-title">解析：</div>
+                            ${problem.solution.image ? `<div class="solution-image"><img src="${problem.solution.image}" alt="解析图示" /></div>` : ''}
+                            <div class="solution-steps">
+                                ${problem.solution.steps ? problem.solution.steps.map(step => `<p>${step}</p>`).join('') : ''}
+                                <p><strong>答案：</strong> ${problem.solution.finalAnswer}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            problemContainer.innerHTML = problemHTML;
 
             // 更新导航按钮状态
             document.getElementById('prev-btn').disabled = currentProblemIndex === 0;
             document.getElementById('next-btn').disabled = currentProblemIndex === mathProblems.length - 1;
+
+            // 如果有MathJax，尝试渲染数学公式
+            if (window.MathJax) {
+                window.MathJax.typeset();
+            }
         }
 
         // 切换显示/隐藏解析
@@ -217,9 +345,8 @@
             } else {
                 solutionElement.style.display = 'block';
             }
+            console.log("显示/隐藏解析:", id);
         }
-
-        // 下一题和上一题事件监听器已移到init函数中
 
         // 初始化函数
         function init() {
@@ -241,7 +368,7 @@
             });
         }
 
-        // 全局定义toggleSolution函数，确保可以在HTML中直接调用
+        // 全局定义toggleSolution函数，确保在HTML中可以直接调用
         window.toggleSolution = toggleSolution;
     </script>
 </body>
